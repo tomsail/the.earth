@@ -188,7 +188,7 @@
 
 				const textureLoader = new THREE.TextureLoader();
 
-				textureLoader.load( 'textures/planets/world_map.jpg', function ( tex ) {
+				textureLoader.load( 'textures/planets/earth_atmos_4096.jpg', function ( tex ) {
 
 					earthMat.map = tex;
 					earthMat.map.encoding = THREE.sRGBEncoding;
@@ -280,7 +280,7 @@
 					vertexShader: vBGShader,
 					fragmentShader: pBGShader,
 					depthTest: false,
-					// color: 0xffffff
+					// color: 0xffffff,
 					blending: THREE.NoBlending
 				} );
 
@@ -380,6 +380,10 @@
 
 				gui.open();
 
+				// stats
+				stats = new Stats();
+				container.appendChild( stats.dom );
+
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
@@ -423,6 +427,7 @@
 				orbitControls.update();
 
 				render();
+				stats.update();
 
 			}
 
