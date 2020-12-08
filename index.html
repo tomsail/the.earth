@@ -84,7 +84,7 @@
 
 					adaptionRate: 2.0,
 					opacityLights : 0.25,
-					mapHeight : 5
+					mapHeight : 3
 				};
 
 				const container = document.createElement( 'div' );
@@ -263,7 +263,7 @@
 				scene.add( sphereCloudsMesh );
 
 				const sphereAtmoMesh = new THREE.Mesh( earthGeo, earthAtmoMat );
-				sphereAtmoMesh.scale.set( 1.05, 1.05, 1.05 );
+				sphereAtmoMesh.scale.set( 1.1, 1.1, 1.1 );
 				scene.add( sphereAtmoMesh );
 
 				const vBGShader = [
@@ -387,7 +387,7 @@
 
 				sceneGui.add( params, 'bloomAmount', 0.0, 10.0 );
 				sceneGui.add( params, 'sunLight', 0.1, 12.0 );
-				sceneGui.add( params, 'mapHeight', 4, 120 );
+				sceneGui.add( params, 'mapHeight', 1, 120 );
 				sceneGui.add( params, 'opacityLights', 0.0, 1.0 );
 
 				toneMappingGui.add( params, 'enabled' );
