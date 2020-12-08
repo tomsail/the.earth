@@ -44,10 +44,12 @@
 			let bloomPass, adaptToneMappingPass, ldrToneMappingPass, hdrToneMappingPass;
 			let params;
 
-			let camera, scene, renderer, dynamicHdrEffectComposer, hdrEffectComposer, ldrEffectComposer;
+			let camera, scene, renderer, dynamicHdrEffectComposer; 
 			let cameraCube, sceneCube;
 			let cameraBG, debugScene;
 			let adaptiveLuminanceMat, currentLuminanceMat;
+
+			let earthMat,earthLightsMat;
 
 			// STATS
 			let stats;
@@ -80,7 +82,8 @@
 					middleGrey: 0.2,
 					maxLuminance: 30,
 
-					adaptionRate: 2.0
+					adaptionRate: 2.0,
+					opacityLights : 0.95
 				};
 
 				const container = document.createElement( 'div' );
@@ -99,7 +102,7 @@
 
 				orbitControls = new OrbitControls( camera, container );
 				orbitControls.autoRotate = true;
-				orbitControls.autoRotateSpeed = 1;
+				orbitControls.autoRotateSpeed = 0.2 ;
 
 				// SCENE
 
@@ -108,17 +111,24 @@
 				debugScene = new THREE.Scene();
 
 				// LIGHTS
-
 				const ambient = new THREE.AmbientLight( 0x050505 );
 				scene.add( ambient );
 
-				directionalLight = new THREE.DirectionalLight( 0xffffff, params.sunLight );
-				directionalLight.position.set( 2, 0, 10 ).normalize();
+				directionalLight = new THREE.SpotLight( 0xffffff, params.sunLight );
+				directionalLight.position.set( 4, 4, 10 ).normalize();
+				directionalLight.position.multiplyScalar( 140000 );
 				scene.add( directionalLight );
+				directionalLight.castShadow = true;
+				directionalLight.shadow.mapSize.width = 2048;
+				directionalLight.shadow.mapSize.height = 2048;
+				directionalLight.shadow.camera.near = 200;
+				directionalLight.shadow.camera.far = 1500;
+				directionalLight.shadow.camera.fov = 40;
+				directionalLight.shadow.bias = - 0.005;
 
 				const atmoShader = {
 					side: THREE.BackSide,
-					// blending: THREE.AdditiveBlending,
+					blending: THREE.AdditiveBlending,
 					transparent: true,
 					lights: true,
 					uniforms: THREE.UniformsUtils.merge( [
@@ -181,14 +191,14 @@
 
 				const earthAtmoMat = new THREE.ShaderMaterial( atmoShader );
 
-				const earthMat = new THREE.MeshPhongMaterial( {
+				earthMat = new THREE.MeshPhongMaterial( {
 					color: 0xffffff,
-					shininess: 200
+					shininess: 60, 
 				} );
 
 				const textureLoader = new THREE.TextureLoader();
 
-				textureLoader.load( 'textures/planets/earth_atmos_4096.jpg', function ( tex ) {
+				textureLoader.load( 'textures/planets/earth_texture_hd.png', function ( tex ) {
 
 					earthMat.map = tex;
 					earthMat.map.encoding = THREE.sRGBEncoding;
@@ -196,24 +206,30 @@
 
 				} );
 				textureLoader.load( 'textures/planets/earth_specular_2048.jpg', function ( tex ) {
-
 					earthMat.specularMap = tex;
 					earthMat.specularMap.encoding = THREE.sRGBEncoding;
 					earthMat.needsUpdate = true;
 
 				} );
 
-				let earthNormal = textureLoader.load( 'textures/planets/earth-normal-2048.jpg', function( tex ) {
-					earthMat.normalMap = tex;
-					earthMat.needsUpdate = true;
+				textureLoader.load( 'textures/planets/earth-normal-2048.jpg', function( tex ) {
+					earthMat.bumpMap = tex;
+					earthMat.bumpScale = 1200;
 				} );
 
-				const earthLights = textureLoader.load( 'textures/planets/earth_lights_2048.png' );
+				const earthLights = textureLoader.load( 'textures/planets/BlackMarble_2012_3km.jpg' );
 				earthLights.encoding = THREE.sRGBEncoding;
 
-				const earthLightsMat = new THREE.MeshBasicMaterial( {
+				earthLightsMat = new THREE.MeshBasicMaterial( {
 					color: 0xffffff,
 					blending: THREE.AdditiveBlending,
+					// Test done here .. to be continued see the example on threeJS : 
+					// https://threejs.org/examples/#webgl_materials_blending_custom
+					// blending: THREE.CustomBlending,
+					// blendEquation: THREE.AddEquation, //default
+					// blendSrc: THREE.OneMinusDstColorFactor, 
+					// blendDst: THREE.DstColorFactor, 
+					opacity : params.opacityLights,
 					transparent: true,
 					depthTest: false,
 					map: earthLights,
@@ -232,8 +248,11 @@
 				} );
 
 
-				const earthGeo = new THREE.SphereBufferGeometry( 600, 24, 24 );
+				const earthGeo = new THREE.SphereBufferGeometry( 600, 120, 120 );
 				const sphereMesh = new THREE.Mesh( earthGeo, earthMat );
+				sphereMesh.castShadow = true;      //default is false
+				sphereMesh.receiveShadow = true;   //default is false
+
 				scene.add( sphereMesh );
 
 				const sphereLightsMesh = new THREE.Mesh( earthGeo, earthLightsMat );
@@ -320,6 +339,9 @@
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.shadowMap.enabled = true;
+				
+				renderer.outputEncoding = THREE.sRGBEncoding;
 				renderer.autoClear = false;
 
 				container.appendChild( renderer.domElement );
@@ -328,21 +350,15 @@
 				const height = window.innerHeight || 1;
 
 				const parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat };
-				const regularRenderTarget = new THREE.WebGLRenderTarget( windowThirdX, height, parameters );
-				ldrEffectComposer = new EffectComposer( renderer, regularRenderTarget );
-
 				parameters.type = THREE.FloatType;
 
 				if ( renderer.capabilities.isWebGL2 === false && renderer.extensions.has( 'OES_texture_half_float_linear' ) === false ) {
-
 					parameters.type = undefined; // avoid usage of floating point textures
-
 				}
 
 				const hdrRenderTarget = new THREE.WebGLRenderTarget( windowThirdX, height, parameters );
 				dynamicHdrEffectComposer = new EffectComposer( renderer, hdrRenderTarget );
 				dynamicHdrEffectComposer.setSize( window.innerWidth, window.innerHeight );
-				hdrEffectComposer = new EffectComposer( renderer, hdrRenderTarget );
 
 				const debugPass = new RenderPass( debugScene, cameraBG );
 				debugPass.clear = false;
@@ -376,7 +392,9 @@
 				toneMappingGui.add( params, 'maxLuminance', 1, 30 );
 
 				staticToneMappingGui.add( params, 'avgLuminance', 0.001, 2.0 );
+
 				adaptiveToneMappingGui.add( params, 'adaptionRate', 0.0, 10.0 );
+				adaptiveToneMappingGui.add( params, 'opacityLights', 0.0, 1.0 );
 
 				gui.open();
 
@@ -424,6 +442,7 @@
 
 				directionalLight.intensity = params.sunLight;
 
+				earthLightsMat.opacity = params.opacityLights;
 				orbitControls.update();
 
 				render();
@@ -432,6 +451,12 @@
 			}
 
 			function render() {
+
+				// scene.children[1].rotation.y += 0.02;
+				scene.children[2].rotation.y += 0.001; // earth 
+				scene.children[3].rotation.y += 0.001; // lights
+				scene.children[4].rotation.y += 0.0005; // clouds
+				scene.children[4].rotation.z += 0.0005; // clouds
 
 				camera.lookAt( scene.position );
 				cameraCube.rotation.copy( camera.rotation );
