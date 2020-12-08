@@ -83,7 +83,8 @@
 					maxLuminance: 30,
 
 					adaptionRate: 2.0,
-					opacityLights : 0.95
+					opacityLights : 0.95,
+					mapHeight : 12
 				};
 
 				const container = document.createElement( 'div' );
@@ -119,12 +120,12 @@
 				directionalLight.position.multiplyScalar( 140000 );
 				scene.add( directionalLight );
 				directionalLight.castShadow = true;
-				directionalLight.shadow.mapSize.width = 2048;
-				directionalLight.shadow.mapSize.height = 2048;
-				directionalLight.shadow.camera.near = 200;
-				directionalLight.shadow.camera.far = 1500;
-				directionalLight.shadow.camera.fov = 40;
-				directionalLight.shadow.bias = - 0.005;
+				directionalLight.shadow.mapSize.width   = 2048;
+				directionalLight.shadow.mapSize.height 	= 2048;
+				directionalLight.shadow.camera.near     = 200;
+				directionalLight.shadow.camera.far      = 1500;
+				directionalLight.shadow.camera.fov      = 40;
+				directionalLight.shadow.bias 			= -0.005;
 
 				const atmoShader = {
 					side: THREE.BackSide,
@@ -212,9 +213,9 @@
 
 				} );
 
-				textureLoader.load( 'textures/planets/earth-normal-2048.jpg', function( tex ) {
+				textureLoader.load( 'textures/planets/earth_normal_hd.png', function( tex ) {
 					earthMat.bumpMap = tex;
-					earthMat.bumpScale = 1200;
+					earthMat.bumpScale = params.mapHeight;
 				} );
 
 				const earthLights = textureLoader.load( 'textures/planets/BlackMarble_2012_3km.jpg' );
@@ -386,6 +387,8 @@
 
 				sceneGui.add( params, 'bloomAmount', 0.0, 10.0 );
 				sceneGui.add( params, 'sunLight', 0.1, 12.0 );
+				sceneGui.add( params, 'mapHeight', 4, 120 );
+				sceneGui.add( params, 'opacityLights', 0.0, 1.0 );
 
 				toneMappingGui.add( params, 'enabled' );
 				toneMappingGui.add( params, 'middleGrey', 0, 12 );
@@ -394,7 +397,6 @@
 				staticToneMappingGui.add( params, 'avgLuminance', 0.001, 2.0 );
 
 				adaptiveToneMappingGui.add( params, 'adaptionRate', 0.0, 10.0 );
-				adaptiveToneMappingGui.add( params, 'opacityLights', 0.0, 1.0 );
 
 				gui.open();
 
@@ -441,6 +443,7 @@
 				}
 
 				directionalLight.intensity = params.sunLight;
+				earthMat.bumpScale = params.mapHeight;
 
 				earthLightsMat.opacity = params.opacityLights;
 				orbitControls.update();
@@ -455,8 +458,8 @@
 				// scene.children[1].rotation.y += 0.02;
 				scene.children[2].rotation.y += 0.001; // earth 
 				scene.children[3].rotation.y += 0.001; // lights
-				scene.children[4].rotation.y += 0.0005; // clouds
-				scene.children[4].rotation.z += 0.0005; // clouds
+				scene.children[4].rotation.y += 0.0008; // clouds
+				scene.children[4].rotation.z += 0.0002; // clouds
 
 				camera.lookAt( scene.position );
 				cameraCube.rotation.copy( camera.rotation );
