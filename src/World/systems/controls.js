@@ -25,7 +25,7 @@ function initParams(){
 
     adaptionRate: 2.0,
     opacityLights : 0.25,
-    mapHeight : 1.2
+    mapHeight : 1.5
   };
   return params
 }

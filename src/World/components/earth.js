@@ -117,7 +117,7 @@ class Earth{
 
 		} );
 
-		const clouds = textureLoader.load( 'textures/planets/earth_clouds_2048.png' );
+		const clouds = textureLoader.load( 'textures/planets/clouds_8k.png' );
 		clouds.encoding = THREE.sRGBEncoding;
 
 		const earthCloudsMat = new THREE.MeshLambertMaterial( {
