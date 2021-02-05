@@ -14,7 +14,7 @@ function createScene() {
 	const debugScene = new THREE.Scene();
 	const sceneCube = new THREE.Scene();
 
-	const r = "../../textures/cube/MilkyWay/";
+	const r = "../textures/cube/MilkyWay/";
 	const urls = [ r + "dark-s_px.jpg", r + "dark-s_nx.jpg",
 					r + "dark-s_py.jpg", r + "dark-s_ny.jpg",
 					r + "dark-s_pz.jpg", r + "dark-s_nz.jpg" ];
