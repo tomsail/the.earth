@@ -45,7 +45,12 @@ class World {
 	constructor(container,lat,lon){	
 		//  GUI controls
 		params = initParams();
-		gui = initGui(params);
+		// LIGHTS
+		sun = new Sun(params, renderer);
+
+		// OBJECTS
+		earth = new Earth(params, renderer);
+
 		// Cameras (for earth and Cubic scene)
 		camera = createCamera(lat,lon);
 		cameraCube = createCameraCube();
@@ -58,7 +63,6 @@ class World {
 		
 		// Append to HTML
 		container.appendChild(renderer.domElement);
-		gui.open();
 
 		// stats
 		stats = new Stats();
@@ -67,12 +71,11 @@ class World {
 		// Controls : Orbit 
 		orbitControls = createControls(camera, renderer.domElement, camRotation);
 		
-		// LIGHTS
-		sun = new Sun(params, renderer);
-		earth = new Earth(params, renderer);
-
 		const resizer = new Resizer(container, camera, cameraCube, renderer);
 		
+		gui = initGui(params, earth);
+		gui.open();
+
 	}
 
 	async init(){

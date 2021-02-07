@@ -29,9 +29,11 @@ class Loop {
       // this.renderer.update();
       // render a frame
       this.scene.children[3].rotation.y += params.earthRotation; // earth 
-      this.scene.children[4].rotation.y += params.earthRotation; // lights
-      this.scene.children[5].rotation.y += params.earthRotation*2; // clouds
-      this.scene.children[5].rotation.z += params.earthRotation/4; // clouds
+      this.scene.children[4].rotation.y += params.earthRotation; // earth in the future
+      this.scene.children[5].rotation.y += params.earthRotation; // lights
+      this.scene.children[6].rotation.y += params.earthRotation; // lights
+      this.scene.children[7].rotation.y += params.earthRotation*2; // clouds
+      this.scene.children[8].rotation.z += params.earthRotation/4; // clouds
 
       this.camera.lookAt( this.scene.position );
       this.cameraCube.rotation.copy( this.camera.rotation );

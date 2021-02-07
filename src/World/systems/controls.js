@@ -15,7 +15,7 @@ function createControls(camera, canvas, rotation) {
 
 function initParams(){
   const params = {
-    sunLight: 2.3,
+    Map: 0,
     earthRotation: 0.00007,
 
     enabled: true,
@@ -30,7 +30,7 @@ function initParams(){
   return params
 }
 
-function initGui(params){
+function initGui(params, earth){
   const gui = new GUI();
   const sceneGui = gui.addFolder( 'Scenes' );
   const toneMappingGui = gui.addFolder( 'ToneMapping' );
@@ -38,7 +38,6 @@ function initGui(params){
   const adaptiveToneMappingGui = gui.addFolder( 'AdaptiveOnly' );
 
   sceneGui.add( params, 'earthRotation', 0.0, 0.001 );
-  sceneGui.add( params, 'sunLight', 0.1, 12.0 );
   sceneGui.add( params, 'mapHeight', 1, 120 );
   sceneGui.add( params, 'opacityLights', 0.0, 1.0 );
 
@@ -49,6 +48,30 @@ function initGui(params){
   staticToneMappingGui.add( params, 'avgLuminance', 0.001, 2.0 );
 
   adaptiveToneMappingGui.add( params, 'adaptionRate', 0.0, 10.0 );
+
+
+  sceneGui.add( params, 'Map', { 'The Earth today': 0, 'The Earth in year 3000': 1 } ).onChange( function ( val ) {
+
+    switch ( val ) {
+
+      case '0':
+        console.log('loading current map')
+        earth.sphereMesh.visible = true;
+        earth.sphereLightsMesh.visible = true;
+        earth.sphereMesh1.visible = false;
+        earth.sphereLightsMesh1.visible = false;
+        break;
+
+      case '1':
+        console.log('loading future map')
+        earth.sphereMesh1.visible = true;
+        earth.sphereLightsMesh1.visible = true;
+        earth.sphereMesh.visible = false;
+        earth.sphereLightsMesh.visible = false;
+        break;
+    }
+
+  } );
 
   return (gui)
 } 

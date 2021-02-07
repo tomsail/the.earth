@@ -136,15 +136,19 @@ class Sun{
     let M = new Date().getMinutes()  // Get the minute (0-59)
     let S = new Date().getSeconds()  // Get the second (0-59)    
     let t = H*3600 + M*60 + S; 
-    console.log(t);
-
-    // tranformation matrix for the position of the Sun during the day: https://arxiv.org/pdf/1208.1043.pdf
-    let t0 = 18000; 
+    // set t0 for the initial position of the sun
+    let t0 = -3600; 
     let omega = 2 * Math.PI / 23.9545;
-    let A = Math.cos(omega*(t-t0));
-    let B = Math.sin(omega*(t-t0));
 
-    // finally, compute x,y,z coordinates
+    // finally, compute x,y,z coordinates using the tranformation matrix 
+    // for the position of the Sun during the day: https://arxiv.org/pdf/1208.1043.pdf
+    // [ A  B  0]   [X]
+    // |-B  A  0| * |Y| 
+    // [ 0  0  1]   [Z]
+    console.log(t-t0)
+    let A = Math.cos(omega*(t-t0)/3600);
+    let B = Math.sin(omega*(t-t0)/3600);
+
     this.x = A*X + B*Y; 
     this.y = -B*X + A*Y; 
     this.z = Z;

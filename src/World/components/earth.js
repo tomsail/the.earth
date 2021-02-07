@@ -2,6 +2,7 @@ import * as THREE from 'https://unpkg.com/three@0.122.0/build/three.module.js';
 let EARTH_R = 6.371; // in thousand of km
 let SCALE = 40;
 let earthMat;
+let earthMat1;
 const textureLoader = new THREE.TextureLoader();
 
 class Earth{
@@ -74,31 +75,27 @@ class Earth{
 	
 		const earthAtmoMat = new THREE.ShaderMaterial( atmoShader );
 	
+		// NOW
 		earthMat = new THREE.MeshPhongMaterial( {
 			color: 0xffffff,
 			shininess: 60, 
 		} );
-	
-		textureLoader.load( 'textures/planets/earth_texture_hd_3000.jpg', function ( tex ) {
-
+		textureLoader.load( 'textures/planets/earth_texture_hd.jpg', function ( tex ) {
 			earthMat.map = tex;
 			earthMat.map.encoding = THREE.sRGBEncoding;
 			earthMat.needsUpdate = true;
-
 		} );
-		textureLoader.load( 'textures/planets/earth_specular_hd_3000.jpg', function ( tex ) {
+		textureLoader.load( 'textures/planets/earth_specular_hd.jpg', function ( tex ) {
 			earthMat.specularMap = tex;
 			earthMat.specularMap.encoding = THREE.sRGBEncoding;
 			earthMat.needsUpdate = true;
-
 		} );
 
-		textureLoader.load( 'textures/planets/earth_normal_hd_3000.jpg', function( tex ) {
+		textureLoader.load( 'textures/planets/earth_normal_hd.jpg', function( tex ) {
 			earthMat.bumpMap = tex;
 			earthMat.bumpScale = params.mapHeight;
 		} );
-
-		this.earthLights = textureLoader.load( 'textures/planets/earth_lights_500m.jpg' );
+		this.earthLights = textureLoader.load( 'textures/planets/earth_lights_hd.jpg' );
 		this.earthLights.encoding = THREE.sRGBEncoding;
 
 		this.earthLightsMat = new THREE.MeshBasicMaterial( {
@@ -117,6 +114,58 @@ class Earth{
 
 		} );
 
+		this.earthGeo = new THREE.SphereBufferGeometry( EARTH_R * SCALE, 120, 120 );
+		this.sphereMesh = new THREE.Mesh( this.earthGeo, earthMat );
+		this.sphereMesh.castShadow = true;      //default is false
+		this.sphereMesh.receiveShadow = true;   //default is false
+		this.sphereMesh.visible = true;  	
+
+		this.sphereLightsMesh = new THREE.Mesh( this.earthGeo, this.earthLightsMat );
+		this.sphereLightsMesh.visible = true;  	
+
+		// IN THE FUTURE 
+		earthMat1 = new THREE.MeshPhongMaterial( {
+			color: 0xffffff,
+			shininess: 60, 
+		} );
+		textureLoader.load( 'textures/planets/earth_texture_hd_3000.jpg', function ( tex ) {
+			earthMat1.map = tex;
+			earthMat1.map.encoding = THREE.sRGBEncoding;
+			earthMat1.needsUpdate = true;
+		} );
+		textureLoader.load( 'textures/planets/earth_specular_hd_3000.jpg', function ( tex ) {
+			earthMat1.specularMap = tex;
+			earthMat1.specularMap.encoding = THREE.sRGBEncoding;
+			earthMat1.needsUpdate = true;
+		} );
+
+		textureLoader.load( 'textures/planets/earth_normal_hd_3000.jpg', function( tex ) {
+			earthMat1.bumpMap = tex;
+			earthMat1.bumpScale = params.mapHeight;
+		} );
+		this.earthLights1 = textureLoader.load( 'textures/planets/earth_lights_hd_3000.jpg' );
+		this.earthLights1.encoding = THREE.sRGBEncoding;
+
+		this.earthLightsMat1 = new THREE.MeshBasicMaterial( {
+			color: 0xffffff,
+			blending: THREE.AdditiveBlending,
+			opacity : params.opacityLights,
+			transparent: true,
+			depthTest: false,
+			map: this.earthLights1,
+
+		} );
+
+		this.earthGeo = new THREE.SphereBufferGeometry( EARTH_R * SCALE, 120, 120 );
+		this.sphereMesh1 = new THREE.Mesh( this.earthGeo, earthMat1 );
+		this.sphereMesh1.castShadow = true;      //default is false
+		this.sphereMesh1.receiveShadow = true;   //default is false
+		this.sphereMesh1.visible = false;  		
+
+		this.sphereLightsMesh1 = new THREE.Mesh( this.earthGeo, this.earthLightsMat1 );
+		this.sphereLightsMesh1.visible = false;  		
+
+
 		const clouds = textureLoader.load( 'textures/planets/clouds_8k.png' );
 		clouds.encoding = THREE.sRGBEncoding;
 
@@ -128,13 +177,6 @@ class Earth{
 			map: clouds
 		} );
 
-		this.earthGeo = new THREE.SphereBufferGeometry( EARTH_R * SCALE, 120, 120 );
-		this.sphereMesh = new THREE.Mesh( this.earthGeo, earthMat );
-		this.sphereMesh.castShadow = true;      //default is false
-		this.sphereMesh.receiveShadow = true;   //default is false
-
-		this.sphereLightsMesh = new THREE.Mesh( this.earthGeo, this.earthLightsMat );
-
 		this.sphereCloudsMesh = new THREE.Mesh( this.earthGeo, earthCloudsMat );
 		this.sphereCloudsMesh.scale.set( 1.001, 1.001, 1.001 );
 
@@ -144,7 +186,9 @@ class Earth{
 
 	addToScene(scene){
 		scene.add( this.sphereMesh );
+		scene.add( this.sphereMesh1 );
 		scene.add( this.sphereLightsMesh );
+		scene.add( this.sphereLightsMesh1 );
 		scene.add( this.sphereCloudsMesh );
 		scene.add( this.sphereAtmoMesh );
 	}
@@ -216,6 +260,7 @@ class Earth{
 	}
 	updateTextures(params){
 		earthMat.bumpScale = params.mapHeight;
+		earthMat1.bumpScale = params.mapHeight;
 		this.earthLightsMat.opacity = params.opacityLights;
 	}
 

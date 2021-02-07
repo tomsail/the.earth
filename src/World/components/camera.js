@@ -33,7 +33,6 @@ function calcPosFromLatLonRad(lat,lon,radius){
 	return [x,y,z];
 }
 
-
 export { createCamera };
 export { createCameraCube };
 export { calcPosFromLatLonRad };
