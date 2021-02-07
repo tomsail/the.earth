@@ -15,7 +15,7 @@ class Loop {
     this.updatables = [];
   }
 
-  start(stats,orbitControls, sun,earth,params) {
+  start(stats,orbitControls, sun,earth,params, composer) {
     this.renderer.setAnimationLoop(() => {
       // tell every animated object to tick forward one frame
       this.tick();
@@ -23,8 +23,7 @@ class Loop {
       orbitControls.update();
       updateEffectComposer(params, earth);
       earth.updateTextures(params);
-      // sun.update(this.scene, this.camera,this.renderer, params);
-
+      // sun.update(params);
       // update params 
       // this.renderer.update();
       // render a frame
@@ -40,17 +39,6 @@ class Loop {
 
       this.renderer.setViewport( 0, 0 ,window.innerWidth  , window.innerHeight );
       this.effectComposer.render( 0.017 );
-
-      // show the objects in the occlusion scene
-      // this.camera.layers.set(OCCLUSION_LAYER);
-      // // render the occlusion scene and apply the volumetric light shader
-      // sun.occlusionComposer.render();
-
-      // // show the objects in the lit scene
-      // this.camera.layers.set(DEFAULT_LAYER);
-      // // render the lit scene and blend the volumetric light effect
-      // sun.composer.render();
-
     });
   }
 

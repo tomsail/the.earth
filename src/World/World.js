@@ -41,8 +41,11 @@ let gui;
 let lat,lon;
 let meshLoc, geometryLoc;
 
+let composer; 
 class World {
 	constructor(container,lat,lon){	
+		// Renderer
+		renderer = createRenderer();
 		//  GUI controls
 		params = initParams();
 		// LIGHTS
@@ -55,8 +58,6 @@ class World {
 		camera = createCamera(lat,lon);
 		cameraCube = createCameraCube();
 
-		// Renderer
-		renderer = createRenderer();
 
 		// SCENES
 		[scene,sceneCube,debugScene] = createScene();
@@ -78,8 +79,7 @@ class World {
 
 	}
 
-	async init(){
-
+	init(){
 		// Add lights to scene 
 		sun.initLight();
 		// sun.initPostpro();
@@ -90,10 +90,15 @@ class World {
 
 		earth.debugSceneAdd(debugScene);
 
-		dynamicHdrEffectComposer = createEffectComposer(renderer, scene, sceneCube, debugScene, camera, cameraCube, cameraBG);	// LOOP
-		loop = new Loop(camera, cameraCube, scene, renderer,dynamicHdrEffectComposer);
-		loop.updatables.push(orbitControls);
+		// POSTPRO
+		composer  = sun.initPostpro(scene,camera,renderer, params);
 
+		// HDR
+		dynamicHdrEffectComposer = createEffectComposer(renderer, scene, sceneCube, debugScene, camera, cameraCube, cameraBG);	// LOOP
+
+		// INIT LOOP
+		loop = new Loop(camera, cameraCube, scene, renderer,composer);
+		loop.updatables.push(orbitControls);
 	}
 
 	// using loop 

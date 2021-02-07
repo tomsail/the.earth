@@ -181,7 +181,7 @@ class Earth{
 		this.sphereCloudsMesh.scale.set( 1.001, 1.001, 1.001 );
 
 		this.sphereAtmoMesh = new THREE.Mesh( this.earthGeo, earthAtmoMat );
-		this.sphereAtmoMesh.scale.set( 1.1, 1.1, 1.1 );
+		// this.sphereAtmoMesh.scale.set( 1.1, 1.1, 1.1 );
 	}
 
 	addToScene(scene){
