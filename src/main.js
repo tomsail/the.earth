@@ -11,7 +11,6 @@ async function main() {
   }
   
   function showPosition(position) {
-    console.log("la");
     lat = position.coords.latitude;
     lon = position.coords.longitude;
     // Get a reference to the container element
@@ -41,12 +40,10 @@ async function main() {
     const point = [res.location.lat, res.location.lng];
     var lat = res.location.lat;
     var lon = res.location.lng;
-    console.log(res);
     // Get a reference to the container element
     // const container = document.querySelector('#scene-container');
     const container = document.createElement( 'div' );
     document.body.appendChild( container );
-    console.log(lat, lon);
     // create a new world
     const world = new World(container,lat,lon);
 

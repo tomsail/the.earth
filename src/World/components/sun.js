@@ -114,8 +114,8 @@ class Sun{
 
     // calculating the rectangular equatorial coordinates, in the earth referential
     // (earth is in the center of the scene, at pos (0,0,0) )
-    let t = new Date().getTime(); // Get the time (milliseconds since January 1, 1970)
-    let d = t /1000 / 3600 / 24;  // number of days since the 1st January 1970 
+    let T = new Date().getTime(); // Get the time (in ms) since January 1, 1970
+    let d = T /1000 / 3600 / 24;  // translate to number of days 
     // number of days since the 1st of Jan 2000
     let n = d - 10957;            // substracting the number of between 2000 and 1970
     // The mean longitude of the Sun
@@ -126,11 +126,28 @@ class Sun{
     let lambda = L + 1.915 * Math.sin(g/180*Math.PI) + 0.02 * Math.sin(2*g/180*Math.PI); // in degrees
     // Obliquity of the ecliptic
     let epsilon = 23.49 - 0.0000004 * n;
-    // finally, compute x,y , z coordinates
+    // equatorial position [X,Y,Z]
+    let X = Math.cos(lambda/180*Math.PI);
+    let Y = Math.sin(lambda/180*Math.PI) * Math.cos(epsilon/180*Math.PI);
+    let Z = Math.sin(lambda/180*Math.PI) * Math.sin(epsilon/180*Math.PI);
 
-    this.x = Math.cos(lambda/180*Math.PI);
-    this.y = Math.sin(lambda/180*Math.PI) * Math.cos(epsilon/180*Math.PI);
-    this.z = Math.sin(lambda/180*Math.PI) * Math.sin(epsilon/180*Math.PI);
+    // angular velocity of the earth
+    let H = new Date().getHours()    // Get the hour (0-23)
+    let M = new Date().getMinutes()  // Get the minute (0-59)
+    let S = new Date().getSeconds()  // Get the second (0-59)    
+    let t = H*3600 + M*60 + S; 
+    console.log(t);
+
+    // tranformation matrix for the position of the Sun during the day: https://arxiv.org/pdf/1208.1043.pdf
+    let t0 = 18000; 
+    let omega = 2 * Math.PI / 23.9545;
+    let A = Math.cos(omega*(t-t0));
+    let B = Math.sin(omega*(t-t0));
+
+    // finally, compute x,y,z coordinates
+    this.x = A*X + B*Y; 
+    this.y = -B*X + A*Y; 
+    this.z = Z;
     this.r = DIST2SUN;
 
     // a white sphere serves as the sun in the scene used 
@@ -167,8 +184,6 @@ class Sun{
     // physical sun
     this.source.position.set(this.y,this.z,this.x).normalize();
     this.source.position.multiplyScalar( this.r );
-
-    console.log(this.r);
 
     // add ambient
   }
