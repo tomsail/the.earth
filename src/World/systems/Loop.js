@@ -39,6 +39,13 @@ class Loop {
       this.scene.children[7].rotation.y += params.earthRotation*2; // clouds
       this.scene.children[7].rotation.z += params.earthRotation/4; // clouds
 
+      if ( params.showClouds ) {
+        earth.sphereCloudsMesh.visible = true;
+      }
+      else {
+        earth.sphereCloudsMesh.visible = false;
+      }
+
     });
   }
 

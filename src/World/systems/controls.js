@@ -19,6 +19,7 @@ function initParams(){
     Map: 0,
     sunLight: 4,
     earthRotation: 0.00007,
+    showClouds: true,
 
     enabled: true,
     avgLuminance: 1.3,
@@ -34,27 +35,28 @@ function initParams(){
 
 function initGui(params, earth){
   const gui = new GUI();
-  const sceneGui = gui.addFolder( 'Scenes' );
-  const toneMappingGui = gui.addFolder( 'ToneMapping' );
-  const staticToneMappingGui = gui.addFolder( 'StaticOnly' );
-  const adaptiveToneMappingGui = gui.addFolder( 'AdaptiveOnly' );
+  // const sceneGui = gui.addFolder( 'Scenes' );
+  // const toneMappingGui = gui.addFolder( 'ToneMapping' );
+  // const staticToneMappingGui = gui.addFolder( 'StaticOnly' );
+  // const adaptiveToneMappingGui = gui.addFolder( 'AdaptiveOnly' );
 
-  sceneGui.add( params, 'earthRotation', 0.0, 0.001 );
-  sceneGui.add( params, 'mapHeight', 1, 120 );
-  sceneGui.add( params, 'sunLight', 0, 5 );
-  sceneGui.add( params, 'opacityLights', 0.0, 1.0 );
+  gui.add( params, 'earthRotation', 0.0, 0.001 );
+  gui.add( params, 'mapHeight', 1, 120 );
+  gui.add( params, 'showClouds' ).name( 'Show clouds' );
+  // gui.add( params, 'sunLight', 0, 5 );
 
-  toneMappingGui.add( params, 'enabled' );
-  toneMappingGui.add( params, 'middleGrey', 0, 12 );
-  toneMappingGui.add( params, 'maxLuminance', 1, 30 );
+  // gui.add( params, 'opacityLights', 0.0, 1.0 );
 
-  staticToneMappingGui.add( params, 'avgLuminance', 0.001, 2.0 );
+  // toneMappingGui.add( params, 'enabled' );
+  // toneMappingGui.add( params, 'middleGrey', 0, 12 );
+  // toneMappingGui.add( params, 'maxLuminance', 1, 30 );
 
-  adaptiveToneMappingGui.add( params, 'adaptionRate', 0.0, 10.0 );
+  // staticToneMappingGui.add( params, 'avgLuminance', 0.001, 2.0 );
 
+  // adaptiveToneMappingGui.add( params, 'adaptionRate', 0.0, 10.0 );
 
-  sceneGui.add( params, 'Map', { 'The Earth today': 0, 'The Earth in year 3000': 1 } ).onChange( function ( val ) {
-
+  gui.add( params, 'Map', { 'now': 0, 'in 3000': 1 } ).onChange( function ( val ) {
+    
     switch ( val ) {
 
       case '0':
