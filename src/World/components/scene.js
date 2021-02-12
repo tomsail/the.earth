@@ -22,6 +22,7 @@ function createScene() {
 	const textureCube = new THREE.CubeTextureLoader().load( urls );
 	textureCube.encoding = THREE.sRGBEncoding;
 
+	scene.background = textureCube;
 	sceneCube.background = textureCube;
 
 

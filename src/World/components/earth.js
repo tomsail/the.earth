@@ -165,7 +165,6 @@ class Earth{
 		this.sphereLightsMesh1 = new THREE.Mesh( this.earthGeo, this.earthLightsMat1 );
 		this.sphereLightsMesh1.visible = false;  		
 
-
 		const clouds = textureLoader.load( 'textures/planets/clouds_8k.png' );
 		clouds.encoding = THREE.sRGBEncoding;
 
@@ -181,7 +180,7 @@ class Earth{
 		this.sphereCloudsMesh.scale.set( 1.001, 1.001, 1.001 );
 
 		this.sphereAtmoMesh = new THREE.Mesh( this.earthGeo, earthAtmoMat );
-		// this.sphereAtmoMesh.scale.set( 1.1, 1.1, 1.1 );
+		this.sphereAtmoMesh.scale.set( 1.05, 1.05, 1.05 );
 	}
 
 	addToScene(scene){
@@ -189,6 +188,9 @@ class Earth{
 		scene.add( this.sphereMesh1 );
 		scene.add( this.sphereLightsMesh );
 		scene.add( this.sphereLightsMesh1 );
+	}
+
+	addtoScenePPP(scene){
 		scene.add( this.sphereCloudsMesh );
 		scene.add( this.sphereAtmoMesh );
 	}

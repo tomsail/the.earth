@@ -4,9 +4,10 @@ import { GUI } from 'https://unpkg.com/three@0.124.0//examples/jsm/libs/dat.gui.
 function createControls(camera, canvas, rotation) {
   const controls = new OrbitControls(camera, canvas);
 
-  // controls.enableDamping = true;
+  controls.enableDamping = true;
 	controls.autoRotate = true;
   controls.autoRotateSpeed =  rotation;
+  controls.enablePan = true;
   
   // forward controls.update to our custom .tick method
   controls.tick = () => controls.update();
@@ -16,6 +17,7 @@ function createControls(camera, canvas, rotation) {
 function initParams(){
   const params = {
     Map: 0,
+    sunLight: 4,
     earthRotation: 0.00007,
 
     enabled: true,
@@ -39,6 +41,7 @@ function initGui(params, earth){
 
   sceneGui.add( params, 'earthRotation', 0.0, 0.001 );
   sceneGui.add( params, 'mapHeight', 1, 120 );
+  sceneGui.add( params, 'sunLight', 0, 5 );
   sceneGui.add( params, 'opacityLights', 0.0, 1.0 );
 
   toneMappingGui.add( params, 'enabled' );

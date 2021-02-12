@@ -39,7 +39,7 @@ class Sun{
     let S = new Date().getSeconds()  // Get the second (0-59)    
     let t = H*3600 + M*60 + S; 
     // set t0 for the initial position of the sun
-    let t0 = -3600; 
+    let t0 = -1800; 
     let omega = 2 * Math.PI / 23.9545;
 
     // finally, compute x,y,z coordinates using the tranformation matrix 
@@ -64,6 +64,7 @@ class Sun{
 
     // for POSTPRO
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer);
+    this.godraysEffect = null;
   }
   initLight(){
     // sunlight
@@ -84,7 +85,7 @@ class Sun{
 
   initPostpro(scene, camera, renderer, params) {
     // Init GODRAYS effect
-    let godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, this.source, {
+    this.godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, this.source, {
       resolutionScale: 0.75,
       density: 0.95,
       decay: 0.95,
@@ -100,7 +101,7 @@ class Sun{
     let searchImage = new Image();
     searchImage.src = POSTPROCESSING.SMAAEffect.searchImageDataURL;
     let smaaEffect = new POSTPROCESSING.SMAAEffect(searchImage,areaImage,1);
-    let effectPass = new POSTPROCESSING.EffectPass(camera,smaaEffect,godraysEffect);
+    let effectPass = new POSTPROCESSING.EffectPass(camera,smaaEffect,this.godraysEffect);
     effectPass.renderToScreen = true;
     this.composer.addPass(renderPass);
     this.composer.addPass(effectPass);
@@ -116,6 +117,9 @@ class Sun{
 
   update(params){
     this.spotLight.intensity = params.sunLight;
+    this.godraysEffect.density = params.sunLight;
+    this.godraysEffect.weight = params.sunLight;
+    this.godraysEffect.decay = params.sunLight;
   }
 }
 
