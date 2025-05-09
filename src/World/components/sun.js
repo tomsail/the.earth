@@ -1,7 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.124.0/build/three.module.js'; 
-import { EffectComposer } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/ShaderPass.js';
+import { EffectComposer } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/ShaderPass.js';
 
 let SCALE = 40;
 let SUN_R = 696*SCALE**2;     // in thousand of km

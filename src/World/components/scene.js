@@ -1,9 +1,9 @@
 import * as THREE from 'https://unpkg.com/three@0.124.0/build/three.module.js';
-import { EffectComposer } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/ShaderPass.js';
-import { AdaptiveToneMappingPass } from 'https://unpkg.com/three@0.124.0//examples/jsm/postprocessing/AdaptiveToneMappingPass.js';
-import { GammaCorrectionShader } from 'https://unpkg.com/three@0.124.0//examples/jsm/shaders/GammaCorrectionShader.js';
+import { EffectComposer } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/ShaderPass.js';
+import { AdaptiveToneMappingPass } from 'https://unpkg.com/three@0.124.0/examples/jsm/postprocessing/AdaptiveToneMappingPass.js';
+import { GammaCorrectionShader } from 'https://unpkg.com/three@0.124.0/examples/jsm/shaders/GammaCorrectionShader.js';
 
 let bloomPass;
 let adaptToneMappingPass;

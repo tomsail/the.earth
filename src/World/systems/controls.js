@@ -1,5 +1,5 @@
 import { OrbitControls } from 'https://unpkg.com/three@0.124.0/examples/jsm/controls/OrbitControls.js';
-import { GUI } from 'https://unpkg.com/three@0.124.0//examples/jsm/libs/dat.gui.module.js';
+import { GUI } from 'https://unpkg.com/three@0.124.0/examples/jsm/libs/dat.gui.module.js';
 
 function createControls(camera, canvas, rotation) {
   const controls = new OrbitControls(camera, canvas);

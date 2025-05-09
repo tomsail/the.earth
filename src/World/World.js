@@ -10,7 +10,7 @@ import { Loop } from './systems/Loop.js';
 import { createRenderer } from './systems/renderer.js';
 import { createControls, initGui, initParams } from './systems/controls.js';
 // import { getGeoLocation } from './systems/geoLocation.js'
-import Stats from 'https://unpkg.com/three@0.124.0//examples/jsm/libs/stats.module.js';
+import Stats from 'https://unpkg.com/three@0.124.0/examples/jsm/libs/stats.module.js';
 
 let loop;
 
